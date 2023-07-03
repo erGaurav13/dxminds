@@ -17,8 +17,13 @@ app.use(express.json());
 app.use('/auth',authRoute)
 app.use("/course",courseRoute)
 app.use("/admin",adminRoute)
+
 app.get("/", (req, res) => {});
 
+// Note :This is the admin (tutor) credential to check the assignement) and admin routes
+// to generate the JWT tokken
+//  email:"admin@gmail.com";
+// password=111
 
 // Server Started
 app.listen(PORT,async () => {

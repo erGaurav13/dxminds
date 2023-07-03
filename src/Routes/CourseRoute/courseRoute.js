@@ -15,6 +15,21 @@ courseRoute.get("/getAllCourse", async (req, res) => {
   }
 });
 
+//get  Course by id
+courseRoute.get("/getAllCourse/:id", async (req, res) => {
+    const {id}=req.params;
+    if(!id){
+        return res.status(400).send({message:"Id is required"})
+    }
+    try {
+      const singleCourse = await CourseModel.findOne({_id:id});
+      console.log(singleCourse)
+      return res.status(200).send({ singleCourse });
+    } catch (e) {
+      return res.status(400).send({ error: e });
+    }
+  });
+
 //   Add to cart functionality
 courseRoute.post("/cart/add", async (req, res) => {
   const { courseId, userId } = req.body;
@@ -64,6 +79,38 @@ courseRoute.get("/getAllcart", async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
+// Assuming all payment are sucessfull so calculate total ammount 
+// and payment is sucessfull
+courseRoute.get("/payment", async (req, res) => {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).send({ message: "User not found" });
+    }
+    try {
+      // Assuming you have a User model with the cart field populated
+      const user = await UserModel.findById(userId).populate("cart.course");
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      let totalAmount = 0;
+  
+      // Calculate the total amount based on the quantity of each cart item
+      user.cart.forEach((item) => {
+        const quantity = item.quantity || 1; // Assuming quantity is a property of each cart item
+        const price = item.course.price; // Assuming price is a property of the course object
+        totalAmount += quantity * price;
+      });
+  
+      // Return the cart items along with the total amount
+      return res.status(200).json({   totalAmount });
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
 
 module.exports = {
   courseRoute,

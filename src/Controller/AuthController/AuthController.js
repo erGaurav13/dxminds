@@ -21,7 +21,7 @@ const checkRegisterEmail=async (email)=>{
 
 const createUser=async(name,email,hash)=>{
  try{
-        const newUser= await UserModel.create({name:name,email:email,password:hash,role:"user"});
+        const newUser= await UserModel.create({name:name,email:email,password:hash,role:"admin"});
         return newUser
  }catch(e){
     console.log(e)
