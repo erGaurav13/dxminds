@@ -46,7 +46,7 @@ adminRoute.get("/getCourse",authenticateAndAuthorize,async ( req,res)=>{
   
 
 // delete course by id ---- Admin (Tutor)
-adminRoute.delete("/getCourse/:id",authenticateAndAuthorize,async ( req,res)=>{
+adminRoute.delete("/delete/:id",authenticateAndAuthorize,async ( req,res)=>{
 
     const {id}=req.params;
 
